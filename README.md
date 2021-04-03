@@ -1,12 +1,12 @@
 # Starting an Express app using MVC
 
-### First steps
+## First steps to making the app
 
 - Create a server.js file inside your new project folder
-- Run "npm init -y" to start a node project and automatically add a package.json file
-- Run "npm i express ejs" to install the Express and EJS modules to the project
+- Run `npm init -y` to start a node project and automatically add a `package.json `file
+- Run `npm i express ejs` to install the Express and EJS modules to the project
 
-### The `server.js` file
+## The entry point: **the `server.js` file**
 
 1. *Load NPM or custom modules*
    - NPM modules are loaded using the `require` keyword
@@ -30,7 +30,7 @@
 
 4. *Mount application middleware*
    - Middleware is mounted to the application using the `use` method of `app`
-		○ app.use()
+     - **CODE:** `app.use()`
 
 5. *Mount route handlers*
    - Links to the route handlers are mounted using the `use` method of `app`
@@ -43,26 +43,36 @@
    - Ports must be unique
    - **CONVENTION:** Use `port 3000` for Express applications
    - **CODE:** `app.listen(3000, function() { console.log("Express is listening on port 3000") });`
-     - The second argument of `listen` is a callback function that runs when the listener is initialized
-			§ http://127.0.0.1:3000/ or http://localhost:3000/
-	• 
-• /models
-	• Has JS files for the data or database that we are referencing
-	• JS files may include:
-		○ Data
-		○ Functions to manipulate and return the data
-	• Files are linked to the controllers that interface with the data
-• /views
-	• Has nested EJS files for the templates for pages
-		○ Nesting is based on the path needed to get to the page
-		○ EJS files usually include:
-			§ index.ejs for main page for path
-			§ show.ejs for details page for the elements within the path
-	• EJS is initialized in server.js using app.set("view engine", "ejs");
-	• Linked to the server.js in controller files using res.render( path )
-		○ Path is  
-• /controllers
-• /routes
+     - The first argument is the number of the port for your app, usually `3000`
+     - The second argument of `listen` (in this case, the `console.log`) is a callback function that is invoked when the listener is initialized
+
+## The M in MVC: **/models**
+- The `models` folder houses JS files for the data or database that we are referencing
+  - These JS files may include:
+    - Data
+    - Functions to manipulate and return the data
+	- A `module.exports` line that allows the file to pass the data if it is called as a dependency
+	  - **CONVENTION:** `module.exports` should consist only of functions that return the data rather than the data itself
+- To connect the models to the application, the `models` JS files will be linked to the controllers that interface with the data
+
+## The V in MVC: **/views**
+- The `views` folder houses EJS files for the page templates in your app
+- The files are organized with subpaths in nested folders inside the `views` folder
+  - Nesting is based on the path needed to get to the page
+    - EJS files usually include:
+      - `index.ejs` for main page for path
+      - `show.ejs` for details page for the elements within the path
+  - The EJS files are linked to the app through the controller files
+- EJS files
+  - EJS files are set up and work similar to HTML files
+	- One big difference is that EJS files can embed JavaScript code inside
+	  - To insert JS code that is not printed, wrap the code snippet with `<%` and `%>`
+	  - To insert JS code to be printed, wrap what needs to be printed with `<%=` and `%>`
+
+
+## The C in MVC: **/controllers**
+
+## The listeners: **/routes**
 	• Normal routing
 		○ Has non-nested JS files for the routes
 		○ Linked to the server.js by
@@ -91,4 +101,9 @@
 					® Redirect will redirect to a path
 		○ Route handlers are like front-end event handlers, but for server requests
 			§ But route handlers take in more information than event handlers do
-		
+
+## Code Testing
+- Remember to save all of your files, especially `server.js`
+- Use Nodemon to automatically shutdown and restart your server after you save the entry point
+  - Run `nodemon` in the terminal to start Nodemon
+- Once all of your files are saved, go to http://127.0.0.1:3000/ or http://localhost:3000/
