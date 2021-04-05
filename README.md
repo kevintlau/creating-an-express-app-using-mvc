@@ -60,7 +60,7 @@
    - The port will be used to run the Node process.
    - Ports must be unique.
    - **CONVENTION:** Use `port 3000` for Express applications.
-   - **CODE:** `app.listen(3000, function() { console.log("Express is listening on port 3000") });`
+   - **CODE:** `app.listen(3000, function() { console.log("Express is listening on port 3000.") });`
      - The first argument is the number of the port for your app, usually `3000`.
      - The second argument of `listen` (in this case, the `console.log`) is a callback function that is invoked when the listener is initialized.
 
@@ -92,6 +92,7 @@
   - To run code, views will likely need JS variables, which should be passed in as a context object in the `render` function in the controller.
 	  - The properties inside the context object serve as local variables for the view.
   - To include CSS files, a static asset module, like `express.static`, is needed. After this type of module is installed, CSS files can be linked in the EJS file via `/css/style.css`.
+  - Links and form actions to other addresses require a starting slash for relative paths.
 
 ## The C in MVC: **/controllers**
 - The `controllers` folder houses "controller" JS files that define the functions that respond to HTTP requests.
@@ -107,11 +108,11 @@
 - **CONVENTION:** The functions inside controllers are named after their CRUD operations.
   - These functions take in `req` and `res` as parameters.
   - For "read" or "show" operations, use `res.render` and link to the view template.
-    - **CONVENTION:** `res.render` will, by default, start from the `views` folder in the app, so addresses passed as the first argument to `render` need to be in relation to `views`.
+    - **CONVENTION:** `res.render` will, by default, start from the `views` folder in the app, so addresses passed as the first argument to `render` need to be in relation to `views`. Addresses to relative paths in controller JS files do not need starting slashes.
     - `res.render` will accept a context object to be passed to the view as a second argument.
       - To add request-based data to the context object, call methods on `req`, such as `req.params.id`.
   - **CONVENTION:** For "update", "create", and "delete" operations, include `res.redirect` to bring the user back to a relevant page after the operation is completed.
-    - **CONVENTION:** Just as in `res.render`, the argument to `res.redirect` will also be in relation to the views folder.
+    - **CONVENTION:** Just as in `res.render`, the argument to `res.redirect` will also be in relation to the views folder. Once again, addresses to relative paths in controller JS files do not need starting slashes.
 
 ## The router modules: **/routes**
 - The `routes` folder contains "router module" JS files that direct the HTTP requests to the proper controller functions.
@@ -122,13 +123,14 @@
   - The `router` variable will be used to map the requests to the controller functions.
 - **RELATIONSHIP TO APP:** Router modules import functions from controller files and export the `router` variable to `server.js`.
   - **CODE (beginning of file):** `const pathCtrl = require("../controllers/path");`
+    - Addresses to the relative paths of controller JS files do not need starting slashes.
   - **CODE (end of file)**: `module.exports = router;`
 - Router modules map the **HTTP method** at a certain **URI endpoint** to a CRUD **controller function**.
   - **CODE (general format of route):** `router.httpMethod(endpoint, pathCtrl.ctrlFunction);`
     - HTTP methods include `get`, `post`, `put`, `patch`, and `delete`.
       - `put`, `patch`, and `delete` may need a methodOverride module to work with HTML5. Alternatively, you can use `post` with an "update" or "delete" endpoint.
     - **CONVENTION:** Different combinations of HTTP methods and URI endpoints will conventionally map to certain controller functions. See [this guide](https://gist.github.com/myDeveloperJourney/dfb5b8728c54fce5e0e997ac3ce466a0) for combinations.
-    - The base path of the URI for a given router module was already specified when module was mounted in the `server.js` file. The URIs should be in relation to the subpath, NOT the root.
+    - The base path of the URI for a given router module was already specified when module was mounted in the `server.js` file. The URIs should be in relation to the subpath, NOT the root, and do require starting slashes.
 
 ## Code Testing
 - Remember to save all of your files, especially `server.js`.
