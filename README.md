@@ -4,7 +4,7 @@
 
 - Create a server.js file inside your new project folder.
 - Run `npm init -y` to start a node project and automatically add a `package.json` file.
-- Run `npm i express ejs morgan` to install the Express, EJS, and logger modules to the project.
+- Run `npm i express ejs morgan method-override` to install the Express, EJS, logger, and method override modules to the project.
 
 ## The entry point: **the `server.js` file**
 
@@ -12,6 +12,9 @@
    - NPM modules are loaded using the `require` keyword.
      - **CONVENTION:** Use the module name for the variable name.
      - **CODE:** `const express = require("express");`
+   - Key middleware also need to be loaded here.
+     - **CODE:** `const morgan = require("morgan");`
+     - **CODE:** `const methodOverride = require("method-override");`
    - Custom modules like routers also need to be loaded here.
      - **CONVENTION:** Use `pathRouter` for the module name for a given `path`.
      - Routers are stored in a folder within root, so the argument to `require` is `./routes/[path]`.
@@ -41,6 +44,8 @@
        - **CODE:** `app.use(express.static("public"));`
        - **CONVENTION:** Use `public` as the directory for the static assets.
        - If `public` is used as the directory, links to CSS files in views should be in relation to `public`, or `/css/style.css`.
+     - `method-override` - override module that allows PUT and DELETE methods for environments that don't support them
+       - **CODE:** `app.use(methodOverride("_method"));`
    - Custom middleware:
      - Custom middleware is called using `app.use` with a callback function as an argument.
        - The parameters to the callback function are `req`, `res`, and `next`.
@@ -93,6 +98,13 @@
 	  - The properties inside the context object serve as local variables for the view.
   - To include CSS files, a static asset module, like `express.static`, is needed. After this type of module is installed, CSS files can be linked in the EJS file via `/css/style.css`.
   - Links and form actions to other addresses require a starting slash for relative paths.
+    - Forms that perform HTTP methods should have the following attributes:
+      - **CODE:** `method="GET"` for GET requests, or `method="POST"` for POST, PUT, PATCH, and DELETE requests.
+      - **CODE:** `action="(URI endpoint here)"`
+        - For PUT, PATCH, and DELETE actions, you will need to append `?_method=(action here)` to the URI, before the string close. `_method` in this case calls the `method-override` module.
+          - For example, a sample DELETE URI might have the attribute `action="/items/<%= id %>?_method=DELETE"`.
+        - **CONVENTION:** Different combinations of HTTP methods and URI endpoints will conventionally signify the responses to certain requests. See [this guide](https://gist.github.com/myDeveloperJourney/dfb5b8728c54fce5e0e997ac3ce466a0) for combinations.
+    
 
 ## The C in MVC: **/controllers**
 - The `controllers` folder houses "controller" JS files that define the functions that respond to HTTP requests.
